@@ -1,7 +1,7 @@
-import AuthFormClient from './AuthFormClient';
+import AuthForm from './AuthForm';
 import { api } from '~/trpc/server';
 
-export default async function AuthForm() {
+export default async function AuthFormPreload() {
     const countriesPromise = api.misc.getCountries.query();
     const clientCountryPromise = api.misc.getClientCountry.query();
 
@@ -10,7 +10,5 @@ export default async function AuthForm() {
         clientCountryPromise
     ]);
 
-    return (
-        <AuthFormClient countries={countries} clientCountry={clientCountry} />
-    );
+    return <AuthForm countries={countries} clientCountry={clientCountry} />;
 }

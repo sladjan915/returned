@@ -6,7 +6,7 @@ const config = {
     quoteProps: 'consistent',
     semi: true,
     trailingComma: 'none',
-    plugins: ['prettier-plugin-tailwindcss', 'prettier-plugin-sort-imports']
+    plugins: ['prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss']
 };
 
 export default config;

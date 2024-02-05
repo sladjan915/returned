@@ -1,5 +1,4 @@
-import { createTRPCRouter, publicProcedure } from '../trpc';
-import Supabase from '~/server/data/supabase';
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 import { z } from 'zod';
 
 export const authRouter = createTRPCRouter({
@@ -9,9 +8,13 @@ export const authRouter = createTRPCRouter({
                 phoneNumber: z.string()
             })
         )
-        .mutation(({ input: { phoneNumber } }) =>
-            Supabase.sendOTPCode({ phoneNumber })
-        ),
+        .mutation(async ({ ctx: { supabase }, input: { phoneNumber } }) => {
+            const { error } = await supabase.auth.signInWithOtp({
+                phone: phoneNumber
+            });
+
+            if (error) throw Error(error.message);
+        }),
     verifyOTPCode: publicProcedure
         .input(
             z.object({
@@ -19,7 +22,26 @@ export const authRouter = createTRPCRouter({
                 otpCode: z.string()
             })
         )
-        .mutation(({ input: { phoneNumber, otpCode } }) =>
-            Supabase.verifyOTPCode({ phoneNumber, otpCode })
-        )
+        .mutation(
+            async ({ ctx: { supabase }, input: { phoneNumber, otpCode } }) => {
+                const { error } = await supabase.auth.verifyOtp({
+                    phone: phoneNumber,
+                    token: otpCode,
+                    type: 'sms'
+                });
+
+                if (error) throw Error(error.message);
+            }
+        ),
+    signOut: protectedProcedure.mutation(async ({ ctx: { supabase } }) => {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw Error(error.message);
+    }),
+    getUser: protectedProcedure.query(
+        ({
+            ctx: {
+                session: { user }
+            }
+        }) => user
+    )
 });

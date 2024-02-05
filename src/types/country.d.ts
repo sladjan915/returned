@@ -1,3 +1,3 @@
-import { getCountries } from '~/server/data/countries';
+import { type getCountries } from '~/server/data/countries';
 
 export type Country = Awaited<ReturnType<typeof getCountries>>[number];

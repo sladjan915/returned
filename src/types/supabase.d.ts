@@ -9,7 +9,82 @@ export type Json =
 export interface Database {
     public: {
         Tables: {
-            [_ in never]: never;
+            FoundItems: {
+                Row: {
+                    finderPhoneNumber: string;
+                    foundAt: string;
+                    id: string;
+                    isReturned: boolean;
+                };
+                Insert: {
+                    finderPhoneNumber: string;
+                    foundAt?: string;
+                    id: string;
+                    isReturned?: boolean;
+                };
+                Update: {
+                    finderPhoneNumber?: string;
+                    foundAt?: string;
+                    id?: string;
+                    isReturned?: boolean;
+                };
+                Relationships: [
+                    {
+                        foreignKeyName: 'FoundItems_id_fkey';
+                        columns: ['id'];
+                        isOneToOne: false;
+                        referencedRelation: 'RegisteredItems';
+                        referencedColumns: ['id'];
+                    }
+                ];
+            };
+            NonRegisteredItems: {
+                Row: {
+                    createdAt: string;
+                    id: string;
+                };
+                Insert: {
+                    createdAt?: string;
+                    id?: string;
+                };
+                Update: {
+                    createdAt?: string;
+                    id?: string;
+                };
+                Relationships: [];
+            };
+            RegisteredItems: {
+                Row: {
+                    createdAt: string;
+                    id: string;
+                    ownerId: string;
+                    registeredAt: string;
+                    tag: string;
+                };
+                Insert: {
+                    createdAt: string;
+                    id: string;
+                    ownerId: string;
+                    registeredAt?: string;
+                    tag: string;
+                };
+                Update: {
+                    createdAt?: string;
+                    id?: string;
+                    ownerId?: string;
+                    registeredAt?: string;
+                    tag?: string;
+                };
+                Relationships: [
+                    {
+                        foreignKeyName: 'RegisteredItems_ownerId_fkey';
+                        columns: ['ownerId'];
+                        isOneToOne: false;
+                        referencedRelation: 'users';
+                        referencedColumns: ['id'];
+                    }
+                ];
+            };
         };
         Views: {
             [_ in never]: never;

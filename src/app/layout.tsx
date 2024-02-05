@@ -1,5 +1,5 @@
 import { Montserrat_Alternates } from 'next/font/google';
-import Providers from '~/components/Providers';
+import Providers from '~/app/_components/Providers';
 import { type PropsWithChildren } from 'react';
 import { cn } from '~/utils/cn';
 import '~/styles/globals.css';
@@ -18,7 +18,12 @@ export const metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
     return (
         <html lang='en'>
-            <body className={cn(MontserratAlternates.className)}>
+            <body
+                className={cn(
+                    MontserratAlternates.className,
+                    'relative flex h-dvh w-dvw items-center justify-center'
+                )}
+            >
                 <Providers>{children}</Providers>
             </body>
         </html>

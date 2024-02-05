@@ -1,12 +1,21 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { type NextRequest } from 'next/server';
-
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { createTRPCContext } from '~/server/api/trpc';
+import { type Database } from '~/types/supabase';
 import { appRouter } from '~/server/api/root';
+import { cookies } from 'next/headers';
 import { env } from '~/env';
 
-const createContext = async (req: NextRequest) => {
+const createRouteTRPCContext = async (req: NextRequest) => {
+    // OPTIMIZATION: Reduce number of calls of cookies() function.
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient<Database>({
+        cookies: () => cookieStore
+    });
+
     return createTRPCContext({
+        supabase: supabase,
         headers: req.headers
     });
 };
@@ -14,9 +23,9 @@ const createContext = async (req: NextRequest) => {
 const handler = (req: NextRequest) =>
     fetchRequestHandler({
         endpoint: '/api/trpc',
-        req,
+        req: req,
         router: appRouter,
-        createContext: () => createContext(req),
+        createContext: () => createRouteTRPCContext(req),
         onError:
             env.NODE_ENV === 'development'
                 ? ({ path, error }) => {

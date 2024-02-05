@@ -7,9 +7,12 @@ export const env = createEnv({
             .enum(['development', 'test', 'production'])
             .default('development'),
 
+        NEXT_SUPABASE_SERVICE_ROLE_KEY: z.string(),
+
         IPINFO_API_KEY: z.string(),
 
-        NEXT_SUPABASE_SERVICE_ROLE_KEY: z.string()
+        TWILIO_ACCOUNT_SID: z.string(),
+        TWILIO_MESSAGING_AUTH_TOKEN: z.string()
     },
 
     client: {
@@ -26,7 +29,10 @@ export const env = createEnv({
         NEXT_SUPABASE_SERVICE_ROLE_KEY:
             process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY,
 
-        IPINFO_API_KEY: process.env.IPINFO_API_KEY
+        IPINFO_API_KEY: process.env.IPINFO_API_KEY,
+
+        TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+        TWILIO_MESSAGING_AUTH_TOKEN: process.env.TWILIO_MESSAGING_AUTH_TOKEN
     },
 
     skipValidation: !!process.env.SKIP_ENV_VALIDATION,

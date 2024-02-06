@@ -1,8 +1,9 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { forwardRef } from 'react';
-import { useAlert } from '~/app/_components/AlertProvider';
+import { useAlert } from '~/app/[lang]/_components/AlertProvider';
 import { api } from '~/trpc/react';
 import { type MyItem } from '~/types/item';
 
@@ -13,15 +14,18 @@ const Ref_UnregisterItemForm = forwardRef<
     const router = useRouter();
     const alert = useAlert();
 
+    const t = useTranslations('UnregisterNewItemForm');
+
     const { mutate: unregisterItem, isLoading: isUnregisteringItem } =
         api.item.unregisterItem.useMutation({
             onSuccess: () => {
                 router.replace('/dashboard');
                 router.refresh();
 
-                alert.showSuccessMessage('Item has been unregistered');
+                alert.showSuccessMessage(t('item-unregistered'));
             },
-            onError: (error) => alert.showErrorMessage(error.message),
+            onError: (error) =>
+                alert.showErrorMessage(error.data!.localizedMessage),
             onSettled: () => onClose()
         });
 
@@ -29,15 +33,12 @@ const Ref_UnregisterItemForm = forwardRef<
         <dialog className='modal' ref={ref}>
             <div className='modal-box flex flex-col'>
                 <h1 className='text-xl font-bold text-error'>
-                    IRREVERSIBLE ACTION!
+                    {t('irreversible-action')}
                 </h1>
                 <span className='py-2 text-lg'>
-                    Unregistering an item is an irreversible action.
-                    Unregistered item cannot be registered again.
+                    <span>{t('irreversible-action-description')}</span>
                     <br />
-                    <span className='text-error'>
-                        Are you sure that you want to continue?
-                    </span>
+                    <span className='text-error'>{t('are-you-sure')}</span>
                 </span>
                 <div className='modal-action flex flex-row'>
                     <button
@@ -45,14 +46,14 @@ const Ref_UnregisterItemForm = forwardRef<
                         onClick={onClose}
                         disabled={isUnregisteringItem}
                     >
-                        Cancel
+                        {t('cancel')}
                     </button>
                     <button
                         className='btn btn-error'
                         onClick={() => unregisterItem({ id: item.id })}
                         disabled={isUnregisteringItem}
                     >
-                        Unregister
+                        {t('unregister')}
                     </button>
                 </div>
             </div>

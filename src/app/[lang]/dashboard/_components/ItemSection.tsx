@@ -2,6 +2,7 @@ import { type MyItem } from '~/types/item';
 import Item from './Item';
 import Link from 'next/link';
 import { getBaseUrl } from '~/trpc/shared';
+import { useTranslations } from 'next-intl';
 
 export default function ItemSection({
     title,
@@ -10,6 +11,8 @@ export default function ItemSection({
     title: string;
     items: MyItem[];
 }) {
+    const t = useTranslations('ItemSection');
+
     return (
         <div className='relative flex min-h-24 w-full flex-col gap-y-3 rounded-2xl border border-neutral p-4'>
             <span className='pointer-events-none absolute -top-3.5 left-6 h-min bg-base-100 px-3 text-xl'>
@@ -26,7 +29,7 @@ export default function ItemSection({
             ))}
             {items.length === 0 && (
                 <span className='flex px-5 py-4 text-lg text-accent'>
-                    No items
+                    {t('empty')}
                 </span>
             )}
         </div>

@@ -1,13 +1,12 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useAlert } from '~/app/_components/AlertProvider';
-import {
-    ReturnedHeader,
-    HeaderBalancer
-} from '~/app/_components/ReturnedHeader';
+import { useAlert } from '~/app/[lang]/_components/AlertProvider';
+import HeaderBalancer from '~/app/[lang]/_components/HeaderBalancer';
+import ReturnedHeader from '~/app/[lang]/_components/ReturnedHeader';
 import { api } from '~/trpc/react';
 import { getBaseUrl } from '~/trpc/shared';
 
@@ -15,15 +14,18 @@ export default function RegisterItemForm({ itemId }: { itemId: string }) {
     const router = useRouter();
     const alert = useAlert();
 
+    const t = useTranslations('RegisterNewItemForm');
+
     const [tag, setTag] = useState('');
 
     const { mutate: registerItem, isLoading: isRegisteringItem } =
         api.item.registerItem.useMutation({
             onSuccess: () => {
                 router.refresh();
-                alert.showSuccessMessage('Item has been registered');
+                alert.showSuccessMessage(t('item-registered'));
             },
-            onError: (error) => alert.showErrorMessage(error.message)
+            onError: (error) =>
+                alert.showErrorMessage(error.data!.localizedMessage)
         });
 
     return (
@@ -39,16 +41,16 @@ export default function RegisterItemForm({ itemId }: { itemId: string }) {
                     priority
                 />
                 <div className='flex flex-col gap-y-2 text-center'>
-                    <h1 className='text-2xl font-bold'>Register New Item</h1>
-                    <span>
-                        Fill in the data to proceed with the registration.
-                    </span>
+                    <h1 className='text-2xl font-bold'>
+                        {t('register-new-item')}
+                    </h1>
+                    <span>{t('register-new-item-description')}</span>
                 </div>
                 <div className='flex w-full flex-col gap-y-2'>
                     <input
                         className='input input-bordered w-full text-center text-sm'
                         type='text'
-                        placeholder='Tag'
+                        placeholder={t('tag')}
                         value={tag}
                         disabled={isRegisteringItem}
                         onChange={(e) => setTag(e.target.value)}
@@ -63,7 +65,7 @@ export default function RegisterItemForm({ itemId }: { itemId: string }) {
                         }
                         disabled={isRegisteringItem}
                     >
-                        Register
+                        {t('register')}
                     </button>
                 </div>
             </div>

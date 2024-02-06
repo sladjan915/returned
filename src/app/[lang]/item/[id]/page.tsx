@@ -5,7 +5,7 @@ import { ensureAuthenticated } from '~/utils/unauthenticated';
 import InspectItemForm from './_components/InspectItemForm';
 import NotifyOwnerFormPreload from './_components/NotifyOwnerFormPreload';
 
-export default async function Item({
+export default async function ItemPage({
     params: { id }
 }: {
     params: { id: string };

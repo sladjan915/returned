@@ -1,13 +1,14 @@
 'use client';
 
-import LoadingButton from '~/app/_components/LoadingButton';
+import LoadingButton from '~/app/[lang]/_components/LoadingButton';
 import { type Country } from '~/types/country';
 import DialCodeSelect from './DialCodeSelect';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { api } from '~/trpc/react';
 import { cn } from '~/utils/cn';
-import { useAlert } from '~/app/_components/AlertProvider';
+import { useAlert } from '~/app/[lang]/_components/AlertProvider';
+import { useTranslations } from 'next-intl';
 
 export default function AuthForm({
     countries,
@@ -18,6 +19,8 @@ export default function AuthForm({
 }) {
     const router = useRouter();
     const alert = useAlert();
+
+    const t = useTranslations('AuthForm');
 
     // ========== PHONE NUMBER ==========
     const [selectedCountry, setSelectedCountry] = useState(clientCountry);
@@ -39,18 +42,20 @@ export default function AuthForm({
         api.auth.sendOTPCode.useMutation({
             onSuccess: () => {
                 setOTPCodeSent(true);
-                alert.showInfoMessage('OTP code has been sent');
+                alert.showInfoMessage(t('otp-code-sent'));
             },
-            onError: (error) => alert.showErrorMessage(error.message)
+            onError: (error) =>
+                alert.showErrorMessage(error.data!.localizedMessage)
         });
 
     const { mutate: verifyOTPCode, isLoading: isVerifyingOTPCode } =
         api.auth.verifyOTPCode.useMutation({
             onSuccess: () => {
                 router.replace('/dashboard');
-                alert.showSuccessMessage('Signed in successfully');
+                alert.showSuccessMessage(t('signed-in-sucessfully'));
             },
-            onError: (error) => alert.showErrorMessage(error.message)
+            onError: (error) =>
+                alert.showErrorMessage(error.data!.localizedMessage)
         });
 
     const areInputsDisabled = useMemo(
@@ -62,10 +67,8 @@ export default function AuthForm({
     return (
         <div className='flex h-full w-full max-w-xs flex-col items-center justify-center gap-y-10'>
             <div className='flex flex-col gap-y-2 text-center'>
-                <h1 className='text-2xl font-bold'>Sign In</h1>
-                <span>
-                    Fill in the fields below to get access to your account.
-                </span>
+                <h1 className='text-2xl font-bold'>{t('sign-in')}</h1>
+                <span>{t('sign-in-description')}</span>
             </div>
             <div className='flex w-full flex-col gap-y-6'>
                 <div className='flex w-full flex-row gap-x-2'>
@@ -78,25 +81,22 @@ export default function AuthForm({
                     <input
                         className='input input-bordered w-full text-sm'
                         type='tel'
-                        placeholder='Phone Number'
+                        placeholder={t('phone-number')}
                         value={phoneNumber}
                         disabled={areInputsDisabled}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                 </div>
                 {isOTPCodeSend && (
-                    <div className='flex w-full flex-col'>
-                        <span className='px-3 py-1 text-sm'>OTP Code</span>
-                        <input
-                            className='input input-bordered w-full text-center text-sm'
-                            type='tel'
-                            placeholder='XXXXXX'
-                            value={otpCode}
-                            disabled={areInputsDisabled}
-                            maxLength={6}
-                            onChange={(e) => setOTPCode(e.target.value)}
-                        />
-                    </div>
+                    <input
+                        className='input input-bordered w-full text-center text-sm'
+                        type='tel'
+                        placeholder={t('otp-code')}
+                        value={otpCode}
+                        disabled={areInputsDisabled}
+                        maxLength={6}
+                        onChange={(e) => setOTPCode(e.target.value)}
+                    />
                 )}
             </div>
             <div className='flex w-full flex-row gap-x-2'>
@@ -112,7 +112,7 @@ export default function AuthForm({
                         })
                     }
                 >
-                    {isOTPCodeSend ? 'Resend' : 'Send'} OTP Code
+                    {isOTPCodeSend ? t('resend-otp-code') : t('send-otp-code')}
                 </LoadingButton>
                 {isOTPCodeSend && (
                     <LoadingButton
@@ -126,7 +126,7 @@ export default function AuthForm({
                             })
                         }
                     >
-                        Verify
+                        {t('verify')}
                     </LoadingButton>
                 )}
             </div>

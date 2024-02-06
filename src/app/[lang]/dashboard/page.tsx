@@ -1,16 +1,13 @@
 import SignOutButton from './_components/SignOutButton';
-import { getBaseUrl } from '~/trpc/shared';
-import Link from 'next/link';
-import {
-    ReturnedHeader,
-    HeaderBalancer
-} from '~/app/_components/ReturnedHeader';
 import { api } from '~/trpc/server';
-import moment from 'moment';
-import Item from './_components/Item';
 import ItemSection from './_components/ItemSection';
+import ReturnedHeader from '../_components/ReturnedHeader';
+import HeaderBalancer from '../_components/HeaderBalancer';
+import { serverTranslator } from '~/utils/i18n';
 
-export default async function Dashboard() {
+export default async function DashboardPage() {
+    const t = serverTranslator('DashboardPage');
+
     const items = await api.item.getMyItems.query();
 
     const foundItems = items.filter((item) => item.status === 'found');
@@ -27,10 +24,10 @@ export default async function Dashboard() {
             </div>
             <div className='flex w-full flex-1 flex-col items-center gap-y-3'>
                 {foundItems.length > 0 && (
-                    <ItemSection title='Found Items' items={foundItems} />
+                    <ItemSection title={t('found-items')} items={foundItems} />
                 )}
                 {(foundItems.length === 0 || otherItems.length > 0) && (
-                    <ItemSection title='Items' items={otherItems} />
+                    <ItemSection title={t('items')} items={otherItems} />
                 )}
                 <SignOutButton className='mt-8 w-full md:hidden' />
             </div>

@@ -3,23 +3,29 @@ import 'server-only';
 import { type SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { initTRPC, TRPCError } from '@trpc/server';
 import superjson from 'superjson';
-import { ZodError } from 'zod';
 import { type Database } from '~/types/supabase';
 import { type NonNull } from '~/types/non-null';
+import { AppError } from '~/server/error';
+import { type Locale } from '~/i18n';
+import { translator } from '~/utils/i18n';
 
 type TRPCContext = NonNull<Awaited<ReturnType<typeof createTRPCContext>>>;
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
     transformer: superjson,
-    errorFormatter({ shape, error }) {
+    errorFormatter({ ctx, shape, error }) {
+        const t = translator(ctx?.locale ?? 'en', 'Error');
+
+        const appError =
+            error.cause instanceof AppError
+                ? error.cause
+                : new AppError('unknown-error');
+
         return {
             ...shape,
             data: {
-                ...shape.data,
-                zodError:
-                    error.cause instanceof ZodError
-                        ? error.cause.flatten()
-                        : null
+                appError,
+                localizedMessage: t(appError.errorCode)
             }
         };
     }
@@ -37,10 +43,12 @@ const isAuthenticated = t.middleware(({ ctx, next }) => {
 
 export const createTRPCContext = async ({
     supabase,
-    headers
+    headers,
+    locale
 }: {
     supabase: SupabaseClient<Database>;
     headers: Headers;
+    locale: Locale;
 }) => {
     const {
         data: { session }
@@ -49,7 +57,8 @@ export const createTRPCContext = async ({
     return {
         supabase,
         session,
-        headers
+        headers,
+        locale
     };
 };
 

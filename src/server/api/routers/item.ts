@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 import { UNREACHABLE_CODE } from '~/utils/unreachable-code';
 import { adminSupabase } from '~/server/supabase';
 import { twilio } from '~/server/twilio';
+import { raise } from '~/server/error';
 
 export const itemRouter = createTRPCRouter({
     registerItem: protectedProcedure
@@ -25,7 +26,7 @@ export const itemRouter = createTRPCRouter({
                     .eq('id', id)
                     .single();
 
-                if (!nonRegisteredItem) throw Error('Item is not available');
+                if (!nonRegisteredItem) raise('item-not-available');
 
                 const deletePromise = adminSupabase
                     .from('NonRegisteredItems')
@@ -60,9 +61,9 @@ export const itemRouter = createTRPCRouter({
                     .eq('id', id)
                     .single();
 
-                if (!registeredItem) throw Error('This item is not registered');
+                if (!registeredItem) raise('item-not-registered');
                 if (registeredItem.ownerId !== user.id)
-                    throw Error("You don't own this item");
+                    raise('insufficent-permissions');
 
                 await adminSupabase
                     .from('RegisteredItems')
@@ -166,9 +167,9 @@ export const itemRouter = createTRPCRouter({
                 .eq('id', itemId)
                 .single();
 
-            if (!registeredItem) throw Error('Item is not registered');
+            if (!registeredItem) raise('item-not-registered');
             if (registeredItem.foundHistory.some((item) => !item.isReturned))
-                throw Error('Owner is already notified');
+                raise('owner-already-notified');
 
             const {
                 data: { user: owner }
@@ -176,14 +177,13 @@ export const itemRouter = createTRPCRouter({
                 registeredItem.ownerId
             );
 
-            if (!owner) throw Error('User does not exist');
+            if (!owner) raise('user-non-existent');
 
-            if (false)
-                await twilio.messages.create({
-                    body: `Someone has found your '${registeredItem.tag}'!\nContact them via this number for more information: ${finderPhoneNumber}`,
-                    from: '+19133533796',
-                    to: `+${owner.phone!}`
-                });
+            await twilio.messages.create({
+                body: `Someone has found your '${registeredItem.tag}'!\nContact them via this number for more information: ${finderPhoneNumber}`,
+                from: '+19133533796',
+                to: `+${owner.phone!}`
+            });
 
             await adminSupabase.from('FoundItems').insert({
                 id: registeredItem.id,
@@ -209,9 +209,9 @@ export const itemRouter = createTRPCRouter({
                     .eq('id', itemId)
                     .single();
 
-                if (!registeredItem) throw Error('This item is not registered');
+                if (!registeredItem) raise('item-not-registered');
                 if (registeredItem.ownerId !== user.id)
-                    throw Error("You don't own this item");
+                    raise('insufficent-permissions');
 
                 await adminSupabase
                     .from('FoundItems')

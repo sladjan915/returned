@@ -1,0 +1,74 @@
+{
+    "Error": {
+        "unreachable-code": "Unreachable code reached",
+        "unknown-error": "Unknown error",
+        "insufficent-permissions": "Insufficient permissions",
+
+        "unable-to-send-otp-code": "OTP code has not been sent",
+        "unable-to-verify-otp-code": "OTP code has not been verified",
+        "unable-to-sign-out": "Unable to sign out",
+
+        "user-non-existent": "User does not exist",
+
+        "item-not-available": "Item is not available",
+        "item-not-registered": "Item is not registered",
+        "owner-already-notified": "Owner is already notified"
+    },
+    "ReturnedHeader": {
+        "slogan": "No more lost things!"
+    },
+    "Item": {
+        "registered-at": "Registered At"
+    },
+    "ItemSection": {
+        "empty": "Empty"
+    },
+    "SignOutButton": {
+        "sign-out": "Sign Out",
+        "signed-out": "You've been signed out"
+    },
+    "DashboardPage": {
+        "items": "Items",
+        "found-items": "Found Items"
+    },
+    "InspectItemForm": {
+        "tag": "Tag",
+        "registered-at": "Registered At",
+        "mark-as-returned": "Mark As Returned",
+        "unregister": "Unregister",
+        "marked-as-returned": "Marked as returned"
+    },
+    "NotifyOwnerForm": {
+        "you-found-it": "You found it!",
+        "your-found-it-description": "You found someone else's belonging! Please fill in the fields below with your data so that we can notify the owner that their item is safe with you!",
+        "notify-owner": "Notify Owner",
+        "owner-already-notified": "Owner Has Been Notified",
+        "owner-notified": "The owner has been notified! Thank you!"
+    },
+    "RegisterNewItemForm": {
+        "register-new-item": "Register New Item",
+        "register-new-item-description": "Fill in the data to proceed with the registration.",
+        "tag": "Tag",
+        "register": "Register",
+        "item-registered": "Item has been registered"
+    },
+    "UnregisterNewItemForm": {
+        "irreversible-action": "IRREVERSIBLE ACTION!",
+        "irreversible-action-description": "Unregistering an item is an irreversible action. Unregistered item cannot be registered again.",
+        "are-you-sure": "Are you sure you want to continue?",
+        "cancel": "Cancel",
+        "unregister": "Unregister",
+        "item-unregistered": "Item has been unregistered"
+    },
+    "AuthForm": {
+        "sign-in": "Sign In",
+        "sign-in-description": "Fill in the fields below to get access to your account.",
+        "phone-number": "Phone Number",
+        "otp-code": "OTP Code",
+        "send-otp-code": "Send OTP Code",
+        "resend-otp-code": "Resend OTP Code",
+        "verify": "Verify",
+        "otp-code-sent": "OTP code has been sent",
+        "signed-in-sucessfully": "Signed in successfully"
+    }
+}

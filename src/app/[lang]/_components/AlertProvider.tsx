@@ -35,7 +35,7 @@ export function useAlert() {
     return useContext(AlertContext);
 }
 
-export function AlertProvider({ children }: PropsWithChildren) {
+export default function AlertProvider({ children }: PropsWithChildren) {
     const ALERT_DURATION = 3000;
 
     const [alert, setAlert] = useState<Alert>({ message: '', type: 'info' });

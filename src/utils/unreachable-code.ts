@@ -1,3 +1,5 @@
+import { AppError } from '~/server/error';
+
 export function UNREACHABLE_CODE(): never {
-    throw Error('Unreachable code reached!');
+    throw new AppError('unreachable-code');
 }

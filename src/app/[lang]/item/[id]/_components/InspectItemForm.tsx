@@ -2,21 +2,22 @@
 
 import moment from 'moment';
 import Image from 'next/image';
-import {
-    HeaderBalancer,
-    ReturnedHeader
-} from '~/app/_components/ReturnedHeader';
 import { getBaseUrl } from '~/trpc/shared';
 import Ref_UnregisterItemForm from './UnregisterItemForm';
 import { useRef } from 'react';
 import { api } from '~/trpc/react';
 import { useRouter } from 'next/navigation';
-import { useAlert } from '~/app/_components/AlertProvider';
 import { type MyItem } from '~/types/item';
+import { useAlert } from '~/app/[lang]/_components/AlertProvider';
+import { useTranslations } from 'next-intl';
+import ReturnedHeader from '~/app/[lang]/_components/ReturnedHeader';
+import HeaderBalancer from '~/app/[lang]/_components/HeaderBalancer';
 
 export default function InspectItemForm({ item }: { item: MyItem }) {
     const router = useRouter();
     const alert = useAlert();
+
+    const t = useTranslations('InspectItemForm');
 
     const unregisterFormRef = useRef<HTMLDialogElement>(null);
 
@@ -24,9 +25,10 @@ export default function InspectItemForm({ item }: { item: MyItem }) {
         api.item.markAsReturned.useMutation({
             onSuccess: () => {
                 router.refresh();
-                alert.showInfoMessage('Marked as returned');
+                alert.showInfoMessage(t('marked-as-returned'));
             },
-            onError: (error) => alert.showErrorMessage(error.message)
+            onError: (error) =>
+                alert.showErrorMessage(error.data!.localizedMessage)
         });
 
     return (
@@ -43,13 +45,13 @@ export default function InspectItemForm({ item }: { item: MyItem }) {
                 />
                 <div className='text-md flex w-full flex-col'>
                     <span className='flex w-full flex-row justify-between'>
-                        <span>Tag:</span>
+                        <span>{t('tag')}:</span>
                         <span className='font-bold text-accent'>
                             {item.tag}
                         </span>
                     </span>
                     <span className='flex w-full flex-row justify-between'>
-                        <span>Registered at:</span>
+                        <span>{t('registered-at')}:</span>
                         <span className='font-bold text-accent'>
                             {moment(item.registeredAt).format('DD MMM YYYY')}
                         </span>
@@ -62,7 +64,7 @@ export default function InspectItemForm({ item }: { item: MyItem }) {
                             onClick={() => markAsReturned({ itemId: item.id })}
                             disabled={isMarkingAsReturned}
                         >
-                            Mark as returned
+                            {t('mark-as-returned')}
                         </button>
                     )}
                     <button
@@ -70,7 +72,7 @@ export default function InspectItemForm({ item }: { item: MyItem }) {
                         onClick={() => unregisterFormRef.current?.showModal()}
                         disabled={isMarkingAsReturned}
                     >
-                        Unregister
+                        {t('unregister')}
                     </button>
                     <Ref_UnregisterItemForm
                         item={item}

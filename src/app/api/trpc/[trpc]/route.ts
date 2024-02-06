@@ -6,6 +6,7 @@ import { type Database } from '~/types/supabase';
 import { appRouter } from '~/server/api/root';
 import { cookies } from 'next/headers';
 import { env } from '~/env';
+import { type Locale } from '~/i18n';
 
 const createRouteTRPCContext = async (req: NextRequest) => {
     // OPTIMIZATION: Reduce number of calls of cookies() function.
@@ -14,9 +15,12 @@ const createRouteTRPCContext = async (req: NextRequest) => {
         cookies: () => cookieStore
     });
 
+    const locale = cookieStore.get('NEXT_LOCALE')?.value ?? 'en';
+
     return createTRPCContext({
         supabase: supabase,
-        headers: req.headers
+        headers: req.headers,
+        locale: locale as Locale
     });
 };
 

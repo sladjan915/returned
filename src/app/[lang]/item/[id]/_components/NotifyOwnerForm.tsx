@@ -1,13 +1,12 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { useAlert } from '~/app/_components/AlertProvider';
-import {
-    ReturnedHeader,
-    HeaderBalancer
-} from '~/app/_components/ReturnedHeader';
-import DialCodeSelect from '~/app/sign-in/_components/DialCodeSelect';
+import { useAlert } from '~/app/[lang]/_components/AlertProvider';
+import HeaderBalancer from '~/app/[lang]/_components/HeaderBalancer';
+import ReturnedHeader from '~/app/[lang]/_components/ReturnedHeader';
+import DialCodeSelect from '~/app/[lang]/sign-in/_components/DialCodeSelect';
 import { api } from '~/trpc/react';
 import { type Country } from '~/types/country';
 import { type RegisteredItem } from '~/types/item';
@@ -24,6 +23,8 @@ export default function NotifyOwnerForm({
     const router = useRouter();
     const alert = useAlert();
 
+    const t = useTranslations('NotifyOwnerForm');
+
     // ========== PHONE NUMBER ==========
     const [selectedCountry, setSelectedCountry] = useState(clientCountry);
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -38,11 +39,10 @@ export default function NotifyOwnerForm({
         api.item.notifyOwner.useMutation({
             onSuccess: () => {
                 router.refresh();
-                alert.showSuccessMessage(
-                    'The owner has been notified! Thank you!'
-                );
+                alert.showSuccessMessage(t('owner-notified'));
             },
-            onError: (error) => alert.showErrorMessage(error.message)
+            onError: (error) =>
+                alert.showErrorMessage(error.data!.localizedMessage)
         });
 
     const areInputsDisabled = useMemo(
@@ -55,12 +55,8 @@ export default function NotifyOwnerForm({
             <ReturnedHeader />
             <div className='flex flex-1 flex-col items-center justify-center gap-y-8'>
                 <div className='flex flex-col gap-y-2 text-center'>
-                    <h1 className='text-2xl font-bold'>You found it!</h1>
-                    <span>
-                        You found someone else's belonging! Please fill in the
-                        fields below with your data so that we can notify the
-                        owner that their stuff is safe with you!
-                    </span>
+                    <h1 className='text-2xl font-bold'>{t('you-found-it')}</h1>
+                    <span>{t('your-found-it-description')}</span>
                 </div>
                 <div className='flex w-full flex-col gap-y-8'>
                     <div className='flex w-full flex-row gap-x-2'>
@@ -90,8 +86,8 @@ export default function NotifyOwnerForm({
                         disabled={areInputsDisabled}
                     >
                         {item.status === 'registered'
-                            ? 'Notify Owner'
-                            : 'Owner Has Been Notified'}
+                            ? t('notify-owner')
+                            : t('owner-already-notified')}
                     </button>
                 </div>
             </div>

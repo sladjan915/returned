@@ -1,0 +1,74 @@
+{
+    "Error": {
+        "unreachable-code": "Dostignut nedostižan kod",
+        "unknown-error": "Nepoznata greška",
+        "insufficent-permissions": "Nemate dozvolu za ovu radnju",
+
+        "unable-to-send-otp-code": "OTP kod nije poslat",
+        "unable-to-verify-otp-code": "OTP kod nije uspješno verifikovan",
+        "unable-to-sign-out": "Greška pri odjavi",
+
+        "user-non-existent": "Korisnik ne postoji",
+
+        "item-not-available": "Oznaka nije dostupna",
+        "item-not-registered": "Oznaka nije registrovna",
+        "owner-already-notified": "Vlasnik je već obaviješten"
+    },
+    "ReturnedHeader": {
+        "slogan": "Ništa nije izgubljeno!"
+    },
+    "Item": {
+        "registered-at": "Registrovano"
+    },
+    "ItemSection": {
+        "empty": "Prazno"
+    },
+    "SignOutButton": {
+        "sign-out": "Odjavite se",
+        "signed-out": "Uspješno ste odjavljeni"
+    },
+    "DashboardPage": {
+        "items": "Oznake",
+        "found-items": "Pronađene oznake"
+    },
+    "InspectItemForm": {
+        "tag": "Oznaka",
+        "registered-at": "Registrovano",
+        "mark-as-returned": "Označi kao vraćeno",
+        "unregister": "Odjavi",
+        "marked-as-returned": "Označeno kao vraćeno"
+    },
+    "NotifyOwnerForm": {
+        "you-found-it": "Pronašli ste ga!",
+        "your-found-it-description": "Pronašli ste nečije vlasništvo! Molimo Vas da popunite polja ispod sa Vašim podacima kako bismo obavijestili vlasnika da je njihov predmet kod Vas!",
+        "notify-owner": "Obavijesti vlasnika",
+        "owner-already-notified": "Vlasnik je obaviješten",
+        "owner-notified": "Vlasnik je obaviješten! Hvala vam!"
+    },
+    "RegisterNewItemForm": {
+        "register-new-item": "Registrujte novu oznaku",
+        "register-new-item-description": "Popunite podatke kako biste nastavili sa registracijom.",
+        "tag": "Oznaka",
+        "register": "Registruj",
+        "item-registered": "Oznaka je registrovana"
+    },
+    "UnregisterNewItemForm": {
+        "irreversible-action": "NEOPOZIVI POSTUPAK!",
+        "irreversible-action-description": "Odjava oznake je neopoziv postupak. Odjavljeni predmet ne može ponovo biti registrovan.",
+        "are-you-sure": "Da li ste sigurni da želite nastaviti?",
+        "cancel": "Otkaži",
+        "unregister": "Odjavi",
+        "item-unregistered": "Predmet je odjavljen"
+    },
+    "AuthForm": {
+        "sign-in": "Prijavite se",
+        "sign-in-description": "Popunite polja ispod kako biste pristupili svom nalogu.",
+        "phone-number": "Broj telefona",
+        "otp-code": "OTP kod",
+        "send-otp-code": "Pošalji OTP kod",
+        "resend-otp-code": "Ponovno pošalji OTP kod",
+        "verify": "Verifikuj",
+        "otp-code-sent": "OTP kod je poslat",
+        "signed-in-sucessfully": "Uspešno ste prijavljeni"
+    }
+}

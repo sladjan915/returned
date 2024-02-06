@@ -1,8 +1,9 @@
 import { Montserrat_Alternates } from 'next/font/google';
-import Providers from '~/app/_components/Providers';
+import Providers from '~/app/[lang]/_components/Providers';
 import { type PropsWithChildren } from 'react';
 import { cn } from '~/utils/cn';
 import '~/styles/globals.css';
+import { type Locale } from '~/i18n';
 
 const MontserratAlternates = Montserrat_Alternates({
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -15,9 +16,12 @@ export const metadata = {
     icons: [{ rel: 'icon', url: '/icon.svg' }]
 };
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default function RootLayout({
+    children,
+    params: { lang }
+}: PropsWithChildren<{ params: { lang: Locale } }>) {
     return (
-        <html lang='en'>
+        <html lang={lang}>
             <body
                 className={cn(
                     MontserratAlternates.className,
